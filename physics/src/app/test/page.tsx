@@ -50,10 +50,31 @@ const TestPage = () => {
     });
     const ballB = Bodies.circle(300, 500, 50, {
       restitution: 0.9,
+      isStatic: true,
     });
     const ballC = Bodies.circle(300, 150, 50, {
       restitution: 0.9,
     });
+
+    // HTML 요소 생성
+    const ballElement = document.createElement("div");
+    ballElement.style.width = "50px";
+    ballElement.style.height = "50px";
+    ballElement.style.borderRadius = "50%";
+    ballElement.style.backgroundColor = "blue";
+    ballElement.style.position = "absolute";
+    ballElement.style.boxShadow = "0 0 10px 5px rgba(255, 0, 0, 0.5)"; // glowing 클래스 적용
+
+    // HTML 요소를 화면에 추가
+    document.body.appendChild(ballElement);
+
+    // 엔진 업데이트 이벤트를 사용하여 바디 위치 업데이트
+    Matter.Events.on(engine, "beforeUpdate", function () {
+      ballElement.style.transform = `translate(${ballB.position.x - 25}px, ${
+        ballB.position.y - 25
+      }px)`;
+    });
+
     World.add(engine.world, [floor, ballA, ballB, ballC]);
 
     Matter.Runner.run(engine);
